@@ -64,6 +64,7 @@ public class CustomerController(ICustomerService customerService) : ODataControl
         return Updated(customer);
     }
 
+    [HttpDelete("{id:long}")]
     public async Task<ActionResult> Delete([FromRoute] long id)
     {
         await customerService.Delete(id);

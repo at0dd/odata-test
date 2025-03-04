@@ -1,5 +1,7 @@
 # OData Test
-[Documentation](https://learn.microsoft.com/en-us/odata/webapi-8/overview)
+[OData Documentation](https://learn.microsoft.com/en-us/odata/webapi-8/overview)
+
+[Scalar API Documentation](https://localhost:7160/scalar)
 
 ## Get All Customers
 GET `/customers`
