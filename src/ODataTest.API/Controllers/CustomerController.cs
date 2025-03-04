@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData.Deltas;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
 using ODataTest.API.Models;
@@ -14,7 +15,7 @@ public class CustomerController(ICustomerService customerService) : ODataControl
     public async Task<ActionResult<Customer>> Create([FromBody] Customer request)
     {
         Customer customer = await customerService.Create(request);
-        return StatusCode(StatusCodes.Status201Created, customer);
+        return Created(customer);
     }
 
 
@@ -22,20 +23,50 @@ public class CustomerController(ICustomerService customerService) : ODataControl
     [HttpGet]
     public async Task<ActionResult<List<Customer>>> Get()
     {
-        List<Customer> addresses = await customerService.Get();
-        return StatusCode(StatusCodes.Status200OK, addresses);
+        List<Customer> customers = await customerService.Get();
+        return Ok(customers);
     }
 
     [EnableQuery]
     [HttpGet("{id:long}")]
     public async Task<ActionResult<List<Customer>>> Get([FromRoute] long id)
     {
-        Customer? address = await customerService.Get(id);
-        if (address == null)
+        Customer? customer = await customerService.Get(id);
+        if (customer == null)
         {
-            return StatusCode(StatusCodes.Status404NotFound);
+            return NotFound();
         }
 
-        return StatusCode(StatusCodes.Status200OK, address);
+        return Ok(customer);
+    }
+
+    [HttpPut("{id:long}")]
+    public async Task<ActionResult<Customer>> Put([FromRoute] long id, [FromBody] Customer request)
+    {
+        Customer? customer = await customerService.Put(id, request);
+        if (customer == null)
+        {
+            return NotFound();
+        }
+
+        return Updated(customer);
+    }
+
+    [HttpPatch("{id:long}")]
+    public async Task<ActionResult<Customer>> Patch([FromRoute] long id, [FromBody] Delta<Customer> request)
+    {
+        Customer? customer = await customerService.Patch(id, request);
+        if (customer == null)
+        {
+            return NotFound();
+        }
+
+        return Updated(customer);
+    }
+
+    public async Task<ActionResult> Delete([FromRoute] long id)
+    {
+        await customerService.Delete(id);
+        return NoContent();
     }
 }

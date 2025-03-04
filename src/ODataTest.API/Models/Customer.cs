@@ -10,13 +10,13 @@ public class Customer
     public long ID { get; init; }
 
     [MaxLength(20)]
-    public required string Name { get; init; }
+    public required string Name { get; set; }
 
-    public int Age { get; init; }
+    public int Age { get; set; }
 
     public List<Order> Orders { get; init; } = [];
 
     public DateTime CreatedAt { get; init; } = DateTime.UtcNow;
 
-    public DateTime? UpdatedAt { get; init; }
+    public DateTime? UpdatedAt { get; set; }
 }
