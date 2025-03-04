@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using ODataTest.API.Models;
 
 namespace ODataTest.API.DAO;
@@ -5,6 +6,8 @@ namespace ODataTest.API.DAO;
 public interface IAddressDAO
 {
     Task<Address> Create(CreateAddressRequest request);
+
+    Task<List<Address>> Get();
 }
 
 public class AddressDAO(DataContext context) : IAddressDAO
@@ -17,12 +20,16 @@ public class AddressDAO(DataContext context) : IAddressDAO
             City = request.City,
             State = request.State,
             PostalCode = request.PostalCode,
-            CreatedAt = DateTime.Now,
         };
 
         await context.Addresses.AddAsync(address);
         await context.SaveChangesAsync();
 
         return address;
+    }
+
+    public async Task<List<Address>> Get()
+    {
+        return await context.Addresses.ToListAsync();
     }
 }

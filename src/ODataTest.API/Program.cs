@@ -1,8 +1,10 @@
+using Microsoft.EntityFrameworkCore;
 using ODataTest.API.DAO;
+using ODataTest.API.Models;
 using ODataTest.API.Services;
 using Scalar.AspNetCore;
 
-var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
@@ -10,7 +12,15 @@ builder.Services.AddOpenApi();
 builder.Services.AddScoped<IAddressService, AddressService>();
 builder.Services.AddScoped<IAddressDAO, AddressDAO>();
 
-var app = builder.Build();
+builder.Services.AddDbContextPool<DataContext>(
+    optionsBuilder =>
+    {
+        optionsBuilder.UseNpgsql("Host=localhost;Database=odata;Username=postgres;Password=postgres;Port=5434");
+        optionsBuilder.EnableDetailedErrors();
+        optionsBuilder.EnableSensitiveDataLogging();
+    });
+
+WebApplication app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -20,9 +30,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
-
-app.Run();
+await app.RunAsync();

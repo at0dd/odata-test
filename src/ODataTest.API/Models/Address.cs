@@ -21,7 +21,7 @@ public class Address
     [MaxLength(6)]
     public required string PostalCode { get; init; }
 
-    public required DateTime CreatedAt { get; init; } = DateTime.UtcNow;
+    public DateTime CreatedAt { get; init; } = DateTime.UtcNow;
 
     public DateTime? UpdatedAt { get; init; }
 }
