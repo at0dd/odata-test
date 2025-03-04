@@ -3,23 +3,18 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ODataTest.API.Models;
 
-public class Address
+public class Customer
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public long ID { get; init; }
 
     [MaxLength(20)]
-    public required string Street { get; init; }
+    public required string Name { get; init; }
 
-    [MaxLength(20)]
-    public required string City { get; init; }
+    public int Age { get; init; }
 
-    [MaxLength(20)]
-    public required string State { get; init; }
-
-    [MaxLength(6)]
-    public required string PostalCode { get; init; }
+    public List<Order> Orders { get; init; } = [];
 
     public DateTime CreatedAt { get; init; } = DateTime.UtcNow;
 

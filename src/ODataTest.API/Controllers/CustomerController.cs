@@ -7,30 +7,30 @@ using ODataTest.API.Services;
 namespace ODataTest.API.Controllers;
 
 [ApiController]
-[Route("addresses")]
-public class AddressController(IAddressService addressService) : ODataController
+[Route("customers")]
+public class CustomerController(ICustomerService customerService) : ODataController
 {
     [HttpPost]
-    public async Task<ActionResult<string>> Create([FromBody] CreateAddressRequest request)
+    public async Task<ActionResult<Customer>> Create([FromBody] Customer request)
     {
-        Address address = await addressService.Create(request);
-        return StatusCode(StatusCodes.Status201Created, address);
+        Customer customer = await customerService.Create(request);
+        return StatusCode(StatusCodes.Status201Created, customer);
     }
 
 
     [EnableQuery]
     [HttpGet]
-    public async Task<ActionResult<List<Address>>> Get()
+    public async Task<ActionResult<List<Customer>>> Get()
     {
-        List<Address> addresses = await addressService.Get();
+        List<Customer> addresses = await customerService.Get();
         return StatusCode(StatusCodes.Status200OK, addresses);
     }
 
     [EnableQuery]
     [HttpGet("{id:long}")]
-    public async Task<ActionResult<List<Address>>> Get([FromRoute] long id)
+    public async Task<ActionResult<List<Customer>>> Get([FromRoute] long id)
     {
-        Address? address = await addressService.Get(id);
+        Customer? address = await customerService.Get(id);
         if (address == null)
         {
             return StatusCode(StatusCodes.Status404NotFound);

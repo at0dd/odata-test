@@ -11,7 +11,8 @@ using Scalar.AspNetCore;
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 ODataConventionModelBuilder modelBuilder = new ODataConventionModelBuilder();
-modelBuilder.EntitySet<Address>("addresses");
+modelBuilder.EntitySet<Order>("orders");
+modelBuilder.EntitySet<Customer>("customers");
 
 builder.Services
     .AddControllers()
@@ -32,8 +33,11 @@ builder.Services
 
 builder.Services.AddOpenApi();
 
-builder.Services.AddScoped<IAddressService, AddressService>();
-builder.Services.AddScoped<IAddressDAO, AddressDAO>();
+builder.Services.AddScoped<ICustomerService, CustomerService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
+
+builder.Services.AddScoped<ICustomerDAO, CustomerDAO>();
+builder.Services.AddScoped<IOrderDAO, OrderDAO>();
 
 builder.Services.AddDbContextPool<DataContext>(
     optionsBuilder =>
