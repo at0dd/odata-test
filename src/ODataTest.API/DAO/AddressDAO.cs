@@ -8,6 +8,8 @@ public interface IAddressDAO
     Task<Address> Create(CreateAddressRequest request);
 
     Task<List<Address>> Get();
+
+    Task<Address?> Get(long id);
 }
 
 public class AddressDAO(DataContext context) : IAddressDAO
@@ -31,5 +33,10 @@ public class AddressDAO(DataContext context) : IAddressDAO
     public async Task<List<Address>> Get()
     {
         return await context.Addresses.ToListAsync();
+    }
+
+    public async Task<Address?> Get(long id)
+    {
+        return await context.Addresses.FindAsync(id);
     }
 }

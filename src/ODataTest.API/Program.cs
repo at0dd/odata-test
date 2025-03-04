@@ -1,4 +1,8 @@
+using Microsoft.AspNetCore.OData;
+using Microsoft.AspNetCore.OData.Formatter;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Net.Http.Headers;
+using Microsoft.OData.ModelBuilder;
 using ODataTest.API.DAO;
 using ODataTest.API.Models;
 using ODataTest.API.Services;
@@ -6,7 +10,26 @@ using Scalar.AspNetCore;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+ODataConventionModelBuilder modelBuilder = new ODataConventionModelBuilder();
+modelBuilder.EntitySet<Address>("addresses");
+
+builder.Services
+    .AddControllers()
+    .AddOData(
+        options => options
+            .Select()
+            .Filter()
+            .OrderBy()
+            .Expand()
+            .Count()
+            .SetMaxTop(null)
+            .AddRouteComponents(modelBuilder.GetEdmModel()))
+    .AddJsonOptions(
+        options =>
+        {
+            options.JsonSerializerOptions.PropertyNamingPolicy = null;
+        });
+
 builder.Services.AddOpenApi();
 
 builder.Services.AddScoped<IAddressService, AddressService>();

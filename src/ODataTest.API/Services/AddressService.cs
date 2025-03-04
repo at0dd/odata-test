@@ -8,6 +8,8 @@ public interface IAddressService
     Task<Address> Create(CreateAddressRequest request);
 
     Task<List<Address>> Get();
+
+    Task<Address?> Get(long id);
 }
 
 public class AddressService(IAddressDAO addressDAO) : IAddressService
@@ -20,5 +22,10 @@ public class AddressService(IAddressDAO addressDAO) : IAddressService
     public async Task<List<Address>> Get()
     {
         return await addressDAO.Get();
+    }
+
+    public async Task<Address?> Get(long id)
+    {
+        return await addressDAO.Get(id);
     }
 }
